@@ -1,70 +1,65 @@
+myCanvas = document.getElementById("myCanvas")
 
-// Create canvas variable
-var mycanvas = new fabric.Canvas('myCanvas');
- block_y=1;
- block_x=1;
+ctx = myCanvas.getContext("2d")
 
-block_image_width = 350;
-block_image_height = 430;
+var color = "Black"
 
-var block_image_object= "";
+var width_of_line = 1
 
-function new_image(get_image)
+var radius = 200
+
+var mp = ""
+
+myCanvas.addEventListener("mousedown", mouseisdown)
+
+var last_positionofx
+var last_positionofy
+
+var current_x
+var current_y
+
+function mouseisdown(e)
 {
-	// to upload images
-function new_image(get_image)
-{
-	fabric.Image.fromURL(get_image, function(Img) {block_image_object = Img;
-block_image_object.scaleToWidth(block_image_width);
-block_image_object.scaleToHeight(block_image_height);
-block_image_object.set({
-	top:block_y,
-	left:block_x
-});
-canvas.add(block_image_object);
-	});
+    mp = "mouseDown"
 
-}
-}
+    color = document.getElementById("color").value
 
-window.addEventListener("keydown", my_keydown);
+    width_of_line = document.getElementById("linewidth").value
 
-function my_keydown(e)
-{
-keyPressed = e.keyCode;
-console.log(keyPressed);
+    radius = document.getElementById("radius").value
 
-if(keyPressed == '82')
-{
-	new_image('rr1.png');
-	console.log("r");
+    last_positionofx = e.clientX - myCanvas.offsetLeft
+    last_positionofy = e.clientY - myCanvas.offsetTop
 }
 
-	if(keyPressed == '?')
-	{
-		// upload red ranger
-	}
-	if(keyPressed == '71')
-	{
-		block_x = 200;
-		// upload green ranger
-	}
-	
-	if(keyPressed == '89')
-	{
-		block_x =350;
-		// upload yellow ranger
-	}
-	if(keyPressed == '80')
-	{
-		block_x = 600;
-		// upload pink ranger
-	}
-	if(keyPressed == '66')
-	{
-		block_x = 700;
-	// upload blue ranger
-	}
-	
+myCanvas.addEventListener("mousemove", mouse_move)
+
+function mouse_move(r)
+{
+    current_x = r.clientX - myCanvas.offsetLeft
+    current_y = r.clientY - myCanvas.offsetTop
+
+    if (mp=="mouseDown")
+    {
+        ctx.strokeStyle=color
+        ctx.lineWidth=width_of_line
+        ctx.moveTo(last_positionofx, last_positionofy)
+        ctx.beginPath()
+        ctx.arc(current_x, current_y, radius, 0, 2 * Math.PI)
+        ctx.stroke()
+    }
+    last_positionofx=current_x
+    last_positionofy=current_y
 }
 
+myCanvas.addEventListener("mouseup", mouse_up)
+
+function mouse_up(t)
+{
+    mp="mouseUp"
+}
+
+function clearareas()
+{
+    ctx.clearRect(0, 0, myCanvas.width, myCanvas.height)
+}
